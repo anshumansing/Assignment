@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_Assignment_1757001150914-pr-trigger-input-set
+  identifier: Build_Assignment_1757001150914prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: Demo
+  pipeline:
+    identifier: Build_Assignment_1757001150914
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
