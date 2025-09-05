@@ -5,26 +5,38 @@ pipeline:
   orgIdentifier: default
   stages:
     - stage:
-        name: Build
-        identifier: Build
+        name: Build Nginx
+        identifier: Build_Nginx
+        description: ""
         type: CI
         spec:
           cloneCodebase: true
-          execution:
-            steps:
-              - step:
-                  type: Run
-                  name: Echo Welcome Message
-                  identifier: Echo_Welcome_Message
-                  spec:
-                    shell: Sh
-                    command: echo "Welcome to Harness CI"
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
           platform:
             os: Linux
             arch: Amd64
           runtime:
             type: Cloud
             spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Pull_nginx
+                  identifier: Pull_nginx
+                  spec:
+                    shell: Sh
+                    command: docker pull nginx:<+stage.variables.nginx_version>
+        variables:
+          - name: nginx_version
+            type: String
+            description: ""
+            required: true
+            value: <+input>.executionInput().default(1.25.3)
   properties:
     ci:
       codebase:
