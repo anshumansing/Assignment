@@ -30,7 +30,9 @@ pipeline:
                   identifier: Pull_nginx
                   spec:
                     shell: Sh
-                    command: docker pull nginx:<+stage.variables.nginx_version>
+                    command: |-
+                      docker pull nginx:<+stage.variables.nginx_version>
+                      docker build --build-arg NGINX_VERSION=<+stage.variables.nginx_version> -t nginx-custom:<+stage.variables.nginx_version> .
         variables:
           - name: nginx_version
             type: String
