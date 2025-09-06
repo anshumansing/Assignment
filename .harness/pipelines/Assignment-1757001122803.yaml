@@ -35,25 +35,59 @@ pipeline:
                       - Nginx
                     buildArgs:
                       NGINX_VERSION: <+stage.variables.nginx_version>
-              - step:
-                  type: AquaTrivy
-                  name: Scan Image with Trivy
-                  identifier: Scan_Image_with_Trivy
-                  spec:
-                    mode: orchestration
-                    config: default
-                    target:
-                      type: container
-                      detection: auto
-                    advanced:
-                      log:
-                        level: info
-                    privileged: true
-                    connectorRef: account.DockerReg
-                    image:
-                      type: docker_v2
-                      tag: Nginx
-                      name: linkon19/nginx
+              - parallel:
+                  - step:
+                      type: Background
+                      name: dind
+                      identifier: dind
+                      spec:
+                        connectorRef: account.harnessImage
+                        image: docker:dind
+                        shell: Sh
+                  - step:
+                      type: AquaTrivy
+                      name: AquaTrivy_1
+                      identifier: AquaTrivy_1
+                      spec:
+                        target:
+                          detection: auto
+                          type: container
+                        advanced:
+                          log:
+                            level: info
+                          args: {}
+                        privileged: true
+                        mode: orchestration
+                        config: default
+                        image:
+                          type: docker_v2
+                          name: linkon19/nginx
+                          tag: latest
+                          access_token: <+secret.getValue("account.Docker-access-token")
+                          access_id: linkon19
+                  - step:
+                      type: Grype
+                      name: Grype_1
+                      identifier: Grype_1
+                      spec:
+                        target:
+                          detection: auto
+                          type: container
+                        advanced:
+                          log:
+                            level: info
+                          args: {}
+                        privileged: true
+                        mode: orchestration
+                        config: default
+                        image:
+                          type: docker_v2
+                          name: linkon19/nginx
+                          tag: latest
+                          access_token: <+secret.getValue("account.Docker-access-token")
+                          access_id: linkon19
+          sharedPaths:
+            - /var/run
         variables:
           - name: nginx_version
             type: String
