@@ -33,6 +33,8 @@ pipeline:
                     repo: linkon19/nginx
                     tags:
                       - Nginx
+                    buildArgs:
+                      NGINX_VERSION: <+stage.variables.nginx_version>
         variables:
           - name: nginx_version
             type: String
