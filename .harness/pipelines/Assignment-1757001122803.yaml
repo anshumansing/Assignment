@@ -41,9 +41,11 @@ pipeline:
                       name: dind
                       identifier: dind
                       spec:
-                        connectorRef: account.harnessImage
+                        connectorRef: account.DockerReg
                         image: docker:dind
                         shell: Sh
+                        entrypoint:
+                          - dockerd
                   - step:
                       type: AquaTrivy
                       name: AquaTrivy_1
