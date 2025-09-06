@@ -60,7 +60,7 @@ pipeline:
                         privileged: true
                         image:
                           type: docker_v2
-                          tag: latest
+                          tag: Nginx
                           access_id: linkon19
                           access_token: <+secrets.getValue("Docker-access-token")>
                           name: linkon19/nginx
