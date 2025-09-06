@@ -49,22 +49,21 @@ pipeline:
                       name: AquaTrivy_1
                       identifier: AquaTrivy_1
                       spec:
+                        mode: orchestration
+                        config: default
                         target:
-                          detection: auto
                           type: container
+                          detection: auto
                         advanced:
                           log:
                             level: info
-                          args: {}
                         privileged: true
-                        mode: orchestration
-                        config: default
                         image:
                           type: docker_v2
-                          name: linkon19/nginx
                           tag: latest
-                          access_token: <+secret.getValue("account.Docker-access-token")
                           access_id: linkon19
+                          access_token: <+secrets.getValue("Docker-access-token")>
+                          name: linkon19/nginx
                   - step:
                       type: Grype
                       name: Grype_1
