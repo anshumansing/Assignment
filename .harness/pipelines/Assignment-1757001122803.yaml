@@ -25,14 +25,14 @@ pipeline:
           execution:
             steps:
               - step:
-                  type: Run
-                  name: Pull_nginx
-                  identifier: Pull_nginx
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
                   spec:
-                    shell: Sh
-                    command: |-
-                      docker pull nginx:<+stage.variables.nginx_version>
-                      docker build --build-arg NGINX_VERSION=<+stage.variables.nginx_version> -t nginx-custom:<+stage.variables.nginx_version> .
+                    connectorRef: account.DockerReg
+                    repo: linkon19/nginx
+                    tags:
+                      - Nginx
         variables:
           - name: nginx_version
             type: String
