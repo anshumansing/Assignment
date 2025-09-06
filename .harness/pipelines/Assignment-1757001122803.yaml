@@ -35,6 +35,26 @@ pipeline:
                       - Nginx
                     buildArgs:
                       NGINX_VERSION: <+stage.variables.nginx_version>
+              - step:
+                  type: AquaTrivy
+                  name: Scan Image with Trivy
+                  identifier: Scan_Image_with_Trivy
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: container
+                      detection: auto
+                    advanced:
+                      log:
+                        level: info
+                    privileged: true
+                    connectorRef: account.DockerReg
+                    imageTag: Nginx
+                    image:
+                      type: docker_v2
+                      tag: Nginx
+                      name: linkon19/nginx
         variables:
           - name: nginx_version
             type: String
