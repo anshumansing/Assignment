@@ -56,7 +56,7 @@ pipeline:
                           detection: auto
                         advanced:
                           log:
-                            level: info
+                            level: debug
                         privileged: true
                         image:
                           type: docker_v2
@@ -64,6 +64,7 @@ pipeline:
                           access_id: linkon19
                           access_token: <+secrets.getValue("Docker-access-token")>
                           name: linkon19/nginx
+                          domain: docker.io
                   - step:
                       type: Grype
                       name: Grype_1
