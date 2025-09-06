@@ -50,7 +50,6 @@ pipeline:
                         level: info
                     privileged: true
                     connectorRef: account.DockerReg
-                    imageTag: Nginx
                     image:
                       type: docker_v2
                       tag: Nginx
