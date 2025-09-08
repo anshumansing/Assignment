@@ -50,7 +50,7 @@ pipeline:
                       NGINX_VERSION: <+stage.variables.nginx_version>
               - step:
                   type: AquaTrivy
-                  name: AquaTrivy_1
+                  name: Trivy_Container_Scan
                   identifier: AquaTrivy_1
                   spec:
                     mode: orchestration
