@@ -25,6 +25,19 @@ pipeline:
           execution:
             steps:
               - step:
+                  type: Semgrep
+                  name: SAST
+                  identifier: SAST
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: repository
+                      detection: auto
+                    advanced:
+                      log:
+                        level: info
+              - step:
                   type: BuildAndPushDockerRegistry
                   name: BuildAndPushDockerRegistry_1
                   identifier: BuildAndPushDockerRegistry_1
@@ -35,58 +48,27 @@ pipeline:
                       - Nginx
                     buildArgs:
                       NGINX_VERSION: <+stage.variables.nginx_version>
-              - parallel:
-                  - step:
-                      type: Background
-                      name: dind
-                      identifier: dind
-                      spec:
-                        connectorRef: account.DockerReg
-                        image: docker:dind
-                        shell: Sh
-                        entrypoint:
-                          - dockerd
-                  - step:
-                      type: AquaTrivy
-                      name: AquaTrivy_1
-                      identifier: AquaTrivy_1
-                      spec:
-                        mode: orchestration
-                        config: default
-                        target:
-                          type: container
-                          detection: auto
-                        advanced:
-                          log:
-                            level: debug
-                        privileged: true
-                        image:
-                          type: docker_v2
-                          tag: Nginx
-                          access_id: linkon19
-                          access_token: <+secrets.getValue("Docker-access-token")>
-                          name: linkon19/nginx
-                          domain: docker.io
-                  - step:
-                      type: Grype
-                      name: Grype_1
-                      identifier: Grype_1
-                      spec:
-                        mode: orchestration
-                        config: default
-                        target:
-                          type: container
-                          detection: auto
-                        advanced:
-                          log:
-                            level: info
-                        privileged: true
-                        image:
-                          type: docker_v2
-                          tag: Nginx
-                          access_id: linkon19
-                          access_token: <+secret.getValue("Docker-access-token")
-                          name: linkon19/nginx
+              - step:
+                  type: AquaTrivy
+                  name: AquaTrivy_1
+                  identifier: AquaTrivy_1
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: container
+                      detection: auto
+                    advanced:
+                      log:
+                        level: debug
+                    privileged: true
+                    image:
+                      type: docker_v2
+                      tag: Nginx
+                      access_id: linkon19
+                      access_token: <+secrets.getValue("Docker-access-token")>
+                      name: linkon19/nginx
+                      domain: docker.io
           sharedPaths:
             - /var/run
         variables:
